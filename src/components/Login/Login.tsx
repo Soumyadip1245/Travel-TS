@@ -19,7 +19,7 @@ const Login = () => {
     }
     notification.showNotification('Log in is successful','success')
     const user:User = await response.json()
-    console.log(user)
+    
     sessionStorage.setItem("userId",user.id!.toString())
     navigate('/')
   };

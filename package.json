@@ -12,8 +12,6 @@
   "dependencies": {
     "@tanstack/react-query": "^5.56.2",
     "chart.js": "^4.4.4",
-    "datatables.net": "^2.1.6",
-    "datatables.net-dt": "^2.1.6",
     "flowbite": "^2.5.1",
     "jquery": "^3.7.1",
     "react": "^18.3.1",

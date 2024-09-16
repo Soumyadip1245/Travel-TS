@@ -111,7 +111,7 @@ export const getDestinations = async (): Promise<Destination[]> => {
     return await response.json();
   }
   catch (e) {
-    console.log(e)
+
     throw e
   }
 }
@@ -123,7 +123,7 @@ export const getAllVerifiedPackages = async (): Promise<Package[]> => {
     return await response.json();
   }
   catch (e) {
-    console.log(e)
+
     throw e
   }
 }
@@ -135,7 +135,7 @@ export const getUsers = async (): Promise<Response> => {
     return await response;
   }
   catch (e) {
-    console.log(e)
+
     throw e
   }
 }
@@ -147,58 +147,104 @@ export const addWatchlist = async (userId: number, packageId: number): Promise<R
     return await response;
   }
   catch (e) {
-    console.log(e)
+
     throw e
   }
 }
 export const adminStats = async (): Promise<AdminStats> => {
-  try{
+  try {
     const response = await fetch(`/proxy/api/Admin/GetCount`)
-      return await response.json()
+    return await response.json()
   }
-  catch(e){
+  catch (e) {
     throw e
   }
 }
-export const GetAllPackagesThatExist = async ():Promise<Package[]> => {
-  try{
+export const GetAllPackagesThatExist = async (): Promise<Package[]> => {
+  try {
     const response = await fetch('/proxy/api/Package/GetAllPackagesThatExist')
     return await response.json()
   }
-  catch(e){
+  catch (e) {
     throw e
   }
 }
-export const toggleVerify = async(packageId: number, verify: boolean):Promise<Response> => {
-  try{
-    const response = await fetch(`/proxy/api/Package/ToggleVerification?id=${packageId}&isVerified=${verify}`,{
+export const toggleVerify = async (packageId: number, verify: boolean): Promise<Response> => {
+  try {
+    const response = await fetch(`/proxy/api/Package/ToggleVerification?id=${packageId}&isVerified=${verify}`, {
       method: 'POST'
     })
     return await response
   }
-  catch(e){
+  catch (e) {
     throw e
   }
 }
-export const togglePublic = async(packageId: number, publicValue: boolean):Promise<Response> => {
-  try{
-    const response = await fetch(`/proxy/api/Package/TogglePublic?id=${packageId}&isPublic=${publicValue}`,{
+export const togglePublic = async (packageId: number, publicValue: boolean): Promise<Response> => {
+  try {
+    const response = await fetch(`/proxy/api/Package/TogglePublic?id=${packageId}&isPublic=${publicValue}`, {
       method: 'POST'
     })
     return await response
   }
-  catch(e){
+  catch (e) {
     throw e
   }
 }
-export const toggleFeatured = async(packageId: number, feature: boolean):Promise<Response> => {
-  try{
-    const response = await fetch(`/proxy/api/Package/ToggleFeatured?id=${packageId}&isFeatured=${feature}`,{
+export const toggleFeatured = async (packageId: number, feature: boolean): Promise<Response> => {
+  try {
+    const response = await fetch(`/proxy/api/Package/ToggleFeatured?id=${packageId}&isFeatured=${feature}`, {
       method: 'POST'
     })
     return await response
   }
-  catch(e){
+  catch (e) {
+    throw e
+  }
+}
+export const fetchBookings = async (userId?: number): Promise<Response> => {
+  try {
+    if (userId) {
+      const response = await fetch(`/proxy/api/Booking/GetBusinessForUser/GetBusinessForUser?userId=${userId}`)
+      return response
+    }
+    else {
+      const response = await fetch("/proxy/api/Booking/GetBusinessForAdmin")
+      return response
+    }
+  }
+  catch (e: any) {
+    throw e
+  }
+}
+export const rejectBooking = async (bookingId: number): Promise<Response> => {
+  try {
+    const response = await fetch(`/proxy/api/Booking/RejectBooking?id=${bookingId}`)
+    return await response
+  }
+  catch (e: any) {
+    throw e
+  }
+}
+export const sendPayment = async (amount: number, bookingId: number, name: string, email: string): Promise<Response> => {
+  try {
+    const response = await fetch(`/proxy/api/Payment/createPaymentLink`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': '*/*'
+      },
+      body: JSON.stringify({
+        amount: amount,
+        id: bookingId,
+        customerName: name,
+        customerEmail: email
+      })
+    })
+    console.log(response)
+    return await response
+  }
+  catch (e: any) {
     throw e
   }
 }

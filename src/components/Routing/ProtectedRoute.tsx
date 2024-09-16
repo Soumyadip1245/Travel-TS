@@ -16,9 +16,9 @@ const ProtectedRoute:FC<ProtectedRouteProps> = (props) => {
     const id = sessionStorage.getItem('userId')
     const navigate = useNavigate()
     useEffect(()=>{
-        console.log("In")
+        
         const fetchAndRedirect = async () =>{
-            console.log(id)
+            
             if(id){
                 const userData = await fetchUserById(parseInt(id));
                 setUser(userData)
