@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   travelsql:
-    image: multiplexdocker/travel-mysql
+    image: multiplexdocker/travel-mysql:latest
     container_name: frontend_mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -10,7 +10,7 @@ services:
       - "3307:3306"
 
   travelbackend:
-    image: multiplexdocker/travel-backend
+    image: multiplexdocker/travel-backend:latest
     container_name: backend-travel
     ports:
       - "8080:8080"
@@ -26,7 +26,7 @@ services:
       EmailSettings__SmtpUsername: ${SMTP_USERNAME}
       EmailSettings__SmtpPassword: ${SMTP_PASSWORD}
   travelfrontend:
-    image: multiplexdocker/travel-frontend
+    image: multiplexdocker/travel-frontend:latest
     container_name: frontend-travel
     ports:
       - "5173:5173"
