@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  travelsql:
+    image: multiplexdocker/travel-mysql
+    container_name: frontend_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+    ports:
+      - "3307:3306"
+
+  travelbackend:
+    image: multiplexdocker/travel-backend
+    container_name: backend-travel
+    ports:
+      - "8080:8080"
+    depends_on:
+      - travelsql
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=travelsql;Database=${MYSQL_DB};User=root;Password=${MYSQL_ROOT_PASSWORD};"
+      Razorpay__KeyId: ${RAZORPAY_KEY_ID}
+      Razorpay__KeySecret: ${RAZORPAY_KEY_SECRET}
+      EmailSettings__SmtpServer: "smtp.gmail.com"
+      EmailSettings__SmtpPort: 587
+      EmailSettings__SmtpUsername: ${SMTP_USERNAME}
+      EmailSettings__SmtpPassword: ${SMTP_PASSWORD}
+  travelfrontend:
+    image: multiplexdocker/travel-frontend
+    container_name: frontend-travel
+    ports:
+      - "5173:5173"
+    depends_on:
+      - travelsql
+      - travelbackend
+volumes:
+  mysql_data:
