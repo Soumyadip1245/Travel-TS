@@ -2,17 +2,19 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { addWatchlist, getAllVerifiedPackages, getUsers, lockUser } from '../Apis/Api';
 import { useNotification } from '../Context/NotificationContext';
+import { useUserContext } from '../Context/User';
 import { Package, User } from '../Interfaces/Interface';
 import Table from '../Table/Table';
 import LoaderPage from '../Utils/LoaderPage';
 import NotFoundPage from '../Utils/NotFoundPage';
 
 const ManageUser: React.FC = () => {
+    const {user} = useUserContext()
     const notification = useNotification();
     const [selected, setSelected] = useState<string | null>(null)
     const headers = ["Name", "Email", "Lock", "Assign"]
     const { data: users, isLoading: UserLoading, refetch: UserRefetch } = useQuery<User[], Error>({
-        queryKey: ['users'],
+        queryKey: [`users${user?.id}`],
         queryFn: async () => {
             const response = await getUsers();
             if (!response.ok) {
@@ -26,7 +28,7 @@ const ManageUser: React.FC = () => {
         retry: 2,
     });
     const { data: dropdownValues, isLoading: dropdownLoading } = useQuery<Package[], Error>({
-        queryKey: ['verifiedPackages'],
+        queryKey: [`verifiedPackages${user?.id}`],
         queryFn: async () => {
             const response = await getAllVerifiedPackages();
             return response
@@ -54,11 +56,12 @@ const ManageUser: React.FC = () => {
         }
         notification.showNotification(await response.text(),'success')
     }
-    const formattedData = users!.map((users) => ({
+    const formattedData = users!.map((users,index) => ({
         Name: users.businessName || 'N/A',
         Email: users.email || 'N/A',
         Lock: (
             <i
+            key={index}
                 className={`fa-solid ${users.isLocked ? 'fa-lock text-red-500' : 'fa-lock-open text-green-500'}`}
                 style={{ cursor: 'pointer' }}
                 onClick={() => toggleLock(users)}

@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchSupplier, lockUser, sendVerification } from "../Apis/Api";
 import { useNotification } from "../Context/NotificationContext";
+import { useUserContext } from "../Context/User";
 import { User } from "../Interfaces/Interface";
 import Table from "../Table/Table";
 import LoaderPage from "../Utils/LoaderPage";
 import NotFoundPage from "../Utils/NotFoundPage";
 
 const ManageSupplier = () => {
+  const {user} = useUserContext()
   const notification = useNotification();
   const header = ["Business", "Email", "Contact", "Phone", "Locked", "Agreement"];
 
   const { data: suppliers, isLoading, refetch } = useQuery<User[], Error>({
-    queryKey: ['suppliers'],
+    queryKey: [`suppliers${user?.id}`],
     queryFn: async () => {
       const response = await fetchSupplier();
       if (!response.ok) {
@@ -50,13 +52,14 @@ const ManageSupplier = () => {
     notification.showNotification(await response.text(), 'success');
   };
 
-  const formattedData = suppliers!.map((supplier) => ({
+  const formattedData = suppliers!.map((supplier,index) => ({
     Business: supplier.businessName || 'N/A',
     Email: supplier.email || 'N/A',
     Contact: supplier.contactPerson || 'N/A',
     Phone: supplier.phone || 'N/A',
     Locked: (
       <i
+      key={index}
         className={`fa-solid ${supplier.isLocked ? 'fa-lock text-red-500' : 'fa-lock-open text-green-500'}`}
         style={{ cursor: 'pointer' }}
         onClick={() => toggleLock(supplier)}

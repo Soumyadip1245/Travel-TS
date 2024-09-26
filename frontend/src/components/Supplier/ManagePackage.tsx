@@ -15,7 +15,7 @@ const ManagePackage: React.FC = () => {
     const [viewPackage, setView] = useState<Package | null>(null)
     const [isModal, setModal] = useState<boolean>(false)
     const { data: packages, isLoading, refetch } = useQuery<Package[], Error>({
-        queryKey: ['packages'],
+        queryKey: [`packages${user?.id}`],
         queryFn: async () => {
             const response = await GetAllPackagesForSupplier(user?.id!);
             return response;

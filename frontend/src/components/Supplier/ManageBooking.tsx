@@ -14,7 +14,7 @@ const ManageBooking = () => {
     const notification = useNotification()
     const {user} = useUserContext()
     const { data: bookings, isLoading, refetch } = useQuery<BookingType, Error>({
-      queryKey: ["bookings"],
+      queryKey: [`bookings${user?.id}`],
       queryFn: async () => {
         console.log(user)
         const response = await fetchBookings(user?.id);

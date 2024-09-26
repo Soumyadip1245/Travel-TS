@@ -8,7 +8,7 @@ import { SupplierChart, SupplierStats } from "../Interfaces/Interface";
 const SupplierPackage = () => {
   const {user} = useUserContext()
   const { data: stats, isLoading } = useQuery<SupplierStats, Error>({
-    queryKey: ["statsSupplier"],
+    queryKey: [`statsSupplier${user?.id}`],
     queryFn: async () => {
       const response = await supplierStats(user?.id!);
       return response;
@@ -17,7 +17,7 @@ const SupplierPackage = () => {
     retry: 2,
   });
   const { data: statsBooking, isLoading:LoadingBooking } = useQuery<SupplierChart[], Error>({
-    queryKey: ["supplierBooking"],
+    queryKey: [`supplierBooking${user?.id}`],
     queryFn: async () => {
       const response = await supplierChart(user?.id!);
       return response;

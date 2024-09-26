@@ -14,7 +14,7 @@ const ShowPackages = () => {
     const notification = useNotification()
     const [viewPackage, setView] = useState<Package | null>(null)
     const { data: packages, isLoading, refetch } = useQuery<UserPackage, Error>({
-        queryKey: ['packages'],
+        queryKey: [`packages${user?.id}`],
         queryFn: async () => {
             const response = await fetchPackagesForuser(user?.id!);
             return response;

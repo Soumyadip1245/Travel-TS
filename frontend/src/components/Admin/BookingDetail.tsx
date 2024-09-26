@@ -3,6 +3,7 @@ import React from 'react';
 import { fetchBookings, rejectBooking, sendPayment } from '../Apis/Api';
 import BookingCard from '../Card/BookingCard';
 import { useNotification } from '../Context/NotificationContext';
+import { useUserContext } from '../Context/User';
 import { Booking } from '../Interfaces/Interface';
 import Tabs, { TabProps } from '../Tabs/Tabs';
 import LoaderPage from '../Utils/LoaderPage'; // Import LoaderPage component
@@ -15,9 +16,10 @@ interface BookingType {
 }
 
 const BookingDetails: React.FC = () => {
+  const {user} = useUserContext()
   const notification = useNotification();
   const { data: bookings, isLoading, refetch } = useQuery<BookingType, Error>({
-    queryKey: ["bookings"],
+    queryKey: [`bookings${user?.id}`],
     queryFn: async () => {
       const response = await fetchBookings();
       const booking: BookingType = await response.json();

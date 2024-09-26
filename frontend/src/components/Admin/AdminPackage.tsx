@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { adminMonthly, adminStats } from "../Apis/Api";
 import BarGraph, { ChartData } from "../Card/BarGraph";
 import StatsCard, { StatsData } from "../Card/StatsCard";
+import { useUserContext } from "../Context/User";
 import { AdminStats } from "../Interfaces/Interface";
 
 const AdminPackage = () => {
-  
+  const {user} = useUserContext()
   const { data: stats, isLoading } = useQuery<AdminStats, Error>({
-    queryKey: ["stats"],
+    queryKey: [`stats${user?.id}`],
     queryFn: async () => {
       const response = await adminStats();
       return response;
@@ -16,7 +17,7 @@ const AdminPackage = () => {
     retry: 2,
   });
   const { data: statsBooking, isLoading:LoadingBooking } = useQuery<number[], Error>({
-    queryKey: ["statsBooking"],
+    queryKey: [`statsBooking${user?.id}`],
     queryFn: async () => {
       const response = await adminMonthly();
       return response;

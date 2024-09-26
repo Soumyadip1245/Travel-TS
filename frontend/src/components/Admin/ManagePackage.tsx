@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { GetAllPackagesThatExist, fetchSupplier, toggleFeatured, togglePublic, toggleVerify } from '../Apis/Api';
 import PackageCard from '../Card/PackageCard';
 import { useNotification } from '../Context/NotificationContext';
+import { useUserContext } from '../Context/User';
 import { Package, User } from '../Interfaces/Interface';
 import PackageDetail from '../PackageDetail/PackageDetail';
 import Tabs, { TabProps } from '../Tabs/Tabs';
@@ -11,11 +12,12 @@ import NotFoundPage from '../Utils/NotFoundPage';
 
 const ManagePackage: React.FC = () => {
     const notification = useNotification()
+    const {user} = useUserContext()
     const [viewPackage,setView] = useState<Package|null>(null)
     const [selectedSupplier, setSelectedSupplier] = useState<string | null>(null); 
     const [filteredPackages, setFilteredPackages] = useState<Package[] | null>(null);
     const { data: packagesData, isLoading, refetch } = useQuery<Package[], Error>({
-        queryKey: ['packages'],
+        queryKey: [`packages${user?.id}`],
         queryFn: async () => {
             const response = await GetAllPackagesThatExist();
             return response;
@@ -24,7 +26,7 @@ const ManagePackage: React.FC = () => {
         retry: 2,
     });
     const { data: suppliers, isLoading: Loading } = useQuery<User[], Error>({
-        queryKey: ['suppliers'],
+        queryKey: [`suppliers${user?.id}`],
         queryFn: async () => {
             const response = await fetchSupplier();
             if (!response.ok) {
@@ -89,15 +91,10 @@ const ManagePackage: React.FC = () => {
             title: 'Unverified',
             content: (
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {isLoading ? (
-                        <LoaderPage message="Loading Unverified Packages..." />
-                    ) : unverifiedPackages.length === 0 ? (
-                        <NotFoundPage message="No Unverified Packages Found" />
-                    ) : (
+                    {
                         unverifiedPackages.map((pkg, index) => (
                             <PackageCard key={index} pkge={pkg} onVerify={() => VerifyPackage(pkg)} onShowPackageInfo={() => setView(pkg)} />
-                        ))
-                    )}
+                        ))}
                 </div>
             )
         },
@@ -106,15 +103,10 @@ const ManagePackage: React.FC = () => {
             title: 'Private',
             content: (
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {isLoading ? (
-                        <LoaderPage message="Loading Private Packages..." />
-                    ) : privatePackages.length === 0 ? (
-                        <NotFoundPage message="No Private Packages Found" />
-                    ) : (
+                    {
                         privatePackages.map(pkg => (
                             <PackageCard key={pkg.id} pkge={pkg} onMakePublic={() => PublicPackage(pkg)} onShowPackageInfo={() => setView(pkg)} />
-                        ))
-                    )}
+                        ))}
                 </div>
             )
         },
@@ -123,15 +115,10 @@ const ManagePackage: React.FC = () => {
             title: 'Public',
             content: (
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {isLoading ? (
-                        <LoaderPage message="Loading Public Packages..." />
-                    ) : publicPackages.length === 0 ? (
-                        <NotFoundPage message="No Public Packages Found" />
-                    ) : (
+                    {
                         publicPackages.map(pkg => (
                             <PackageCard key={pkg.id} pkge={pkg} onMakePrivate={() => PublicPackage(pkg)} onShowPackageInfo={() => setView(pkg)} />
-                        ))
-                    )}
+                        ))}
                 </div>
             )
         },
@@ -140,15 +127,10 @@ const ManagePackage: React.FC = () => {
             title: 'Verified',
             content: (
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {isLoading ? (
-                        <LoaderPage message="Loading Verified Packages..." />
-                    ) : verifiedPackages.length === 0 ? (
-                        <NotFoundPage message="No Verified Packages Found" />
-                    ) : (
+                    {
                         verifiedPackages.map(pkg => (
                             <PackageCard key={pkg.id} pkge={pkg} onUnverified={() => VerifyPackage(pkg)} onShowPackageInfo={() => setView(pkg)} />
-                        ))
-                    )}
+                        ))}
                 </div>
             )
         },
@@ -157,15 +139,10 @@ const ManagePackage: React.FC = () => {
             title: 'Available',
             content: (
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {isLoading ? (
-                        <LoaderPage message="Loading Available Packages..." />
-                    ) : availablePackages.length === 0 ? (
-                        <NotFoundPage message="No Available Packages Found" />
-                    ) : (
+                    {
                         availablePackages.map(pkg => (
                             <PackageCard key={pkg.id} pkge={pkg} onFeatured={() => FeaturePackage(pkg)} onUnfeatured={() => FeaturePackage(pkg)} onMakePrivate={() => PublicPackage(pkg)} onUnverified={() => VerifyPackage(pkg)} onShowPackageInfo={() => setView(pkg)} />
-                        ))
-                    )}
+                        ))}
                 </div>
             )
         }
