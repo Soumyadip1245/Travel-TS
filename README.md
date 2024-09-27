@@ -34,7 +34,7 @@ Follow the instructions below to set up and run the project locally.
 
 To configure the application and add the following environment variables:
 
-    ```bash
+    
     # MySQL configuration
     MYSQL_ROOT_PASSWORD=<your_mysql_root_password>  # required
     MYSQL_DB=travel                                  # don't change
