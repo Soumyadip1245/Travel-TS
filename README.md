@@ -35,18 +35,18 @@ Follow the instructions below to set up and run the project locally.
 To configure the application and add the following environment variables:
 
     
-    # MySQL configuration
-    MYSQL_ROOT_PASSWORD=<your_mysql_root_password>  # required
-    MYSQL_DB=travel                                  # don't change
-    MYSQL_HOST=travelsql                             # don't change
-
-    # Razorpay configuration (optional)
-    RAZORPAY_KEY_ID=<your_razorpay_key_id>          # required if you want to enable Razorpay
-    RAZORPAY_KEY_SECRET=<your_razorpay_key_secret>  # required if you want to enable Razorpay
-
-    # SMTP configuration (optional)
-    SMTP_USERNAME=<your_smtp_username>                # required if you want to enable email
-    SMTP_PASSWORD=<your_smtp_password>                # required if you want to enable email
+       # MySQL configuration
+       MYSQL_ROOT_PASSWORD=<your_mysql_root_password>  # required
+       MYSQL_DB=travel                                  # don't change
+       MYSQL_HOST=travelsql                             # don't change
+   
+       # Razorpay configuration (optional)
+       RAZORPAY_KEY_ID=<your_razorpay_key_id>          # required if you want to enable Razorpay
+       RAZORPAY_KEY_SECRET=<your_razorpay_key_secret>  # required if you want to enable Razorpay
+   
+       # SMTP configuration (optional)
+       SMTP_USERNAME=<your_smtp_username>                # required if you want to enable email
+       SMTP_PASSWORD=<your_smtp_password>                # required if you want to enable email
 
 3. **Run Docker:**
 
