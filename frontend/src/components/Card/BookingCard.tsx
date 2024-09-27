@@ -158,7 +158,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
             )}
 
             {/* Accept and Reject Buttons for Pending Bookings */}
-            {booking.status === 'Pending' && (
+            {booking.status === 'Pending' && !isUser &&(
                 <div className="flex space-x-4">
                     <button
                         onClick={onAccept}
